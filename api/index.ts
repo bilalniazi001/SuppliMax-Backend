@@ -1,20 +1,19 @@
+// api/index.ts - SIMPLE VERSION
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from '../src/app.module'; // Correct relative path
-import { ExpressAdapter } from '@nestjs/platform-express';
+import { AppModule } from '../src/app.module';
 import express from 'express';
-import serverlessHttp from 'serverless-http'; // Default import use karein
+import serverless from 'serverless-http';
 
-let cachedServer: any;
+const app = express();
 
-async function bootstrapServer() {
-  const expressApp = express();
-  const app = await NestFactory.create(
+async function bootstrap() {
+  const nestApp = await NestFactory.create(
     AppModule,
-    new ExpressAdapter(expressApp)
+    new (require('@nestjs/platform-express')).ExpressAdapter(app)
   );
 
-  // CORS Configuration
-  app.enableCors({
+  // CORS setup
+  nestApp.enableCors({
     origin: [
       'http://localhost:3000',
       'https://gymberista.vercel.app',
@@ -24,20 +23,10 @@ async function bootstrapServer() {
     credentials: true,
   });
 
-  await app.init();
-  return serverlessHttp(expressApp); // serverlessHttp as function call
+  await nestApp.init();
 }
 
-export const handler = async (event: any, context: any) => {
-  if (!cachedServer) {
-    cachedServer = await bootstrapServer();
-  }
-  return cachedServer(event, context);
-};
+bootstrap();
 
-// Local development ke liye
-if (process.env.NODE_ENV === 'development') {
-  bootstrapServer().then(() => {
-    console.log('🚀 Local development server started');
-  });
-}
+// Export for Vercel
+export default serverless(app);
