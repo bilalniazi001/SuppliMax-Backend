@@ -14,14 +14,14 @@ import { ProductsModule } from './products/products.module';
     }),
     
     // MongoDB Connection
-    MongooseModule.forRootAsync({
+    /*MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('DATABASE_URL'),
       }),
       inject: [ConfigService],
     }),
-    
+  */
     // Your modules
     ProductsModule,
   ],
