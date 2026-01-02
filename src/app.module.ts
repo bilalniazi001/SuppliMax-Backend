@@ -13,7 +13,7 @@ import { ProductsModule } from './products/products.module';
     }),
     
     // MongoDB Connection - SIMPLE AND FIXED
-    MongooseModule.forRoot(process.env.DATABASE_URL || 'mongodb://localhost:27017/supplimax', {
+    MongooseModule.forRoot(process.env.MONGODB_URL || '', {
       retryAttempts: 3,
       retryDelay: 1000,
     }),

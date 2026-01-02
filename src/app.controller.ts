@@ -11,8 +11,8 @@ export class AppController {
       timestamp: new Date().toISOString(),
       endpoints: {
         products: '/products',
-        featured: '/products/featured/all',
-        categories: '/products/categories/all',
+        featured: '/products/FeaturedProducts',
+        categories: '/products/ProductCategoryQueue',
         health: '/health'
       }
     };
